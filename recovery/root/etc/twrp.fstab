@@ -5,12 +5,20 @@
 # Currently we dont have e2fsck compiled. So fs check would failed.
 
 # <mount_point>   <fstype>    <device>         <device2>                 <flags>
-system            /system     ext4                                       display="System"
-system_ext        /system_ext ext4                                       display="System_EXT"
-vendor            /vendor     ext4                                       display="Vendor"
-product           /product    ext4                                       display="Product"
-odm               /odm        ext4                                       display="ODM"
-/data             f2fs        /dev/block/bootdevice/by-name/userdata     flags=fileencryption=ice:aes-256-cts;wrappedkey;keydirectory=/metadata/vold/metadata_encryption
+system            /dev/block/mapper/system     ext4                                       display="System"
+system_ext        /dev/block/mapper/system_ext ext4                                       display="System_EXT"
+vendor            /dev/block/mapper/vendor     ext4                                       display="Vendor"
+product           /dev/block/mapper/product    ext4                                       display="Product"
+odm               /dev/block/mapper/odm        ext4                                       display="ODM"
+
+/system_img     emmc   /dev/block/mapper/system                flags=display="System";backup=1;flashimg
+/system_ext_img emmc   /dev/block/mapper/system_ext            flags=display="System_ext";backup=1;flashimg
+/vendor_img     emmc   /dev/block/mapper/vendor                flags=display="Vendor";backup=1;flashimg
+/product_img    emmc   /dev/block/mapper/product               flags=display="Product";backup=1;flashimg
+
+
+/metadata      ext4    /dev/block/bootdevice/by-name/metadata                    flags=display="Metadata";backup=1;wrappedkey
+/data          f2fs    /dev/block/bootdevice/by-name/userdata                    flags=fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,metadata_encryption=aes-256-xts:wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption
 /cache            ext4        /dev/block/bootdevice/by-name/cache        flags=backup=1;wipeingui;wipeduringfactoryreset
 /boot             emmc        /dev/block/bootdevice/by-name/boot         flags=backup=1;flashimg=1
 /dtbo             emmc        /dev/block/bootdevice/by-name/dtbo         flags=display="DTBO";backup=1;flashimg=1
@@ -20,7 +28,6 @@ odm               /odm        ext4                                       display
 /bt_firmware      vfat        /dev/block/bootdevice/by-name/bluetooth    flags=display="Bluetooth";backup=1;flashimg=1
 /dsp              ext4        /dev/block/bootdevice/by-name/dsp          flags=display="DSP";backup=1;flashimg=1
 /cust             ext4        /dev/block/bootdevice/by-name/cust         flags=display="Cust";backup=1;flashimg=1;wipeingui
-/metadata         ext4        /dev/block/bootdevice/by-name/metadata     flags=display="Metadata";backup=1;flashimg=1;wrappedkey;wipeingui
 /splash           emmc        /dev/block/bootdevice/by-name/splash       flags=display="Splash";backup=1;flashimg=1
 /logo             emmc        /dev/block/bootdevice/by-name/logo         flags=display="Logo";backup=1;flashimg=1
 /tz               emmc        /dev/block/bootdevice/by-name/tz           flags=display="Tz";backup=1;flashimg=1
